@@ -1,4 +1,18 @@
-# Current validation — 8 November 2026
+# Validation notes — 9 November 2026
+
+## HACS integration packaging
+
+- Added one integration under `custom_components/brother_wifi_checker/`, root
+  `hacs.json`, manifest, English translations, and the required root brand icon.
+- HACS/HA JSON metadata parses; the icon is a 256×256 PNG; `git diff --check`
+  reports no whitespace errors.
+- Shared Telnet/status/recovery modules now live inside the HACS component;
+  root compatibility modules retain the standalone CLI imports.
+- Home Assistant installation and live integration setup were not performed.
+  The new integration code and existing unit suite were not runtime-tested in
+  this packaging pass. No printer restart was requested.
+- The manifest links to `Kitsok/brother-checker`. No push or publication was
+  performed.
 
 The implementation is now Telnet-only. Earlier web/IPP code and tests, including
 HTML parsers and certificate/protocol options, were removed by explicit user request.
@@ -25,7 +39,7 @@ The blinking condition was reproduced by a user-authorized one-off printer Wi-Fi
 registration kick on border at 19:09:25, outside this application. User confirmed
 blinking and restored reachability. Investigation scripts/help output remain in
 ../temp, separate from this application's runtime. All later live validations use
-Telnet only. Uncommitted repository files are intentionally left for user review.
+Telnet only.
 
 Post-restart verification removed by explicit user request. Both run and restart
 exit after the single reset request: code0 for acknowledged, code3 for uncertain.

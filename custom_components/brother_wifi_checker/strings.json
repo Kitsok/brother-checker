@@ -1,0 +1,43 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to a Brother printer",
+        "description": "Enter the printer's address and Telnet administrator password. Telnet sends credentials without encryption.",
+        "data": {
+          "host": "Printer IP address or hostname",
+          "password": "Telnet administrator password",
+          "timeout": "Connection timeout (seconds)",
+          "scan_interval": "Polling interval (seconds)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not log in or read printer status over Telnet.",
+      "unknown": "Unexpected error while checking the printer."
+    },
+    "abort": {
+      "already_configured": "This printer is already configured."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "reachable": {"name": "Telnet reachable"},
+      "wifi_fault": {"name": "Wi-Fi status incomplete"},
+      "idle": {"name": "Printer reports idle"}
+    },
+    "sensor": {
+      "ssid": {"name": "Wi-Fi SSID"},
+      "mode": {"name": "Wi-Fi mode"},
+      "channel": {"name": "Wi-Fi channel"},
+      "signal": {"name": "Wi-Fi signal"},
+      "authentication": {"name": "Wi-Fi authentication"},
+      "encryption": {"name": "Wi-Fi encryption"},
+      "port_state": {"name": "Printer port state"},
+      "current_job": {"name": "Current job present"}
+    },
+    "button": {
+      "guarded_restart": {"name": "Guarded restart"}
+    }
+  }
+}

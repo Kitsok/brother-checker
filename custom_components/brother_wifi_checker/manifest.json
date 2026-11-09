@@ -1,0 +1,11 @@
+{
+  "domain": "brother_wifi_checker",
+  "name": "Brother Wi-Fi Checker",
+  "version": "0.1.0",
+  "documentation": "https://github.com/Kitsok/brother-checker/blob/main/README.md",
+  "issue_tracker": "https://github.com/Kitsok/brother-checker/issues",
+  "codeowners": ["@Kitsok"],
+  "config_flow": true,
+  "iot_class": "local_polling",
+  "requirements": []
+}
