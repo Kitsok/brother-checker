@@ -6,11 +6,13 @@ import voluptuous as vol
 
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_PASSWORD
+from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import selector
 
 from .brother import CheckError
 from .const import (
+    CONF_AUTO_RECOVERY,
     CONF_SCAN_INTERVAL,
     CONF_TIMEOUT,
     DEFAULT_SCAN_INTERVAL,
@@ -31,6 +33,12 @@ class BrotherWifiCheckerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Configure a printer by host and Telnet administrator password."""
 
     VERSION = 1
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry: config_entries.ConfigEntry):
+        """Return the post-setup options flow."""
+        return BrotherWifiCheckerOptionsFlow()
 
     async def async_step_user(self, user_input: dict | None = None) -> FlowResult:
         """Handle the initial setup form."""
@@ -73,3 +81,22 @@ class BrotherWifiCheckerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             }
         )
         return self.async_show_form(step_id="user", data_schema=schema, errors=errors)
+
+
+class BrotherWifiCheckerOptionsFlow(config_entries.OptionsFlow):
+    """Configure the opt-in automatic recovery behavior."""
+
+    async def async_step_init(self, user_input: dict | None = None) -> FlowResult:
+        """Show and save automatic recovery setting."""
+        if user_input is not None:
+            return self.async_create_entry(title="", data=user_input)
+
+        schema = vol.Schema(
+            {
+                vol.Required(
+                    CONF_AUTO_RECOVERY,
+                    default=bool(self.config_entry.options.get(CONF_AUTO_RECOVERY, False)),
+                ): bool
+            }
+        )
+        return self.async_show_form(step_id="init", data_schema=schema)

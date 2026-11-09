@@ -4,15 +4,23 @@
 
 - Added one integration under `custom_components/brother_wifi_checker/`, root
   `hacs.json`, manifest, English translations, and the required root brand icon.
-- HACS/HA JSON metadata parses; the icon is a 256×256 PNG; `git diff --check`
-  reports no whitespace errors.
 - Shared Telnet/status/recovery modules now live inside the HACS component;
   root compatibility modules retain the standalone CLI imports.
-- Home Assistant installation and live integration setup were not performed.
-  The new integration code and existing unit suite were not runtime-tested in
-  this packaging pass. No printer restart was requested.
 - The manifest links to `Kitsok/brother-checker`. No push or publication was
   performed.
+
+## Opt-in automatic recovery
+
+- Added an integration Configure option, off by default. When on, a reachable
+  `OFF`/channel-0 observation schedules the existing `run` recovery policy: three
+  matching samples ten seconds apart, then the same idle, cooldown, daily-limit,
+  help, and pre-restart checks used by the CLI.
+- Manual and automatic HA actions share one persisted attempt budget and
+  per-entry Telnet lock. A reset request is issued once; the recovery action
+  performs no immediate post-reset polling.
+- The option has not been enabled in the user's HA instance. The modified
+  integration and unit suite were not runtime-tested in this pass. No printer
+  restart or HA configuration change was made.
 
 The implementation is now Telnet-only. Earlier web/IPP code and tests, including
 HTML parsers and certificate/protocol options, were removed by explicit user request.

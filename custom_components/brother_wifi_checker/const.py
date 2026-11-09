@@ -6,6 +6,7 @@ CONF_HOST = "host"
 CONF_PASSWORD = "password"
 CONF_TIMEOUT = "timeout"
 CONF_SCAN_INTERVAL = "scan_interval"
+CONF_AUTO_RECOVERY = "auto_recovery"
 
 DEFAULT_TIMEOUT = 10.0
 DEFAULT_SCAN_INTERVAL = 60

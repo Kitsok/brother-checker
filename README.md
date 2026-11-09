@@ -18,6 +18,9 @@ After this repository is public on GitHub:
    **Brother Wi-Fi Checker**, and enter the printer host, Telnet password,
    connection timeout, and polling interval.
 
+Automatic recovery is off by default. To opt in after setup, open the
+integration's **Configure** dialog and enable **Automatic recovery**.
+
 The repository has one HACS integration at
 `custom_components/brother_wifi_checker/`. `hacs.json` and the integration
 manifest are included. For local development, copy that directory under the HA
@@ -38,10 +41,18 @@ configuration's `custom_components/` directory, then restart HA.
   commands, so `pending_jobs` remains unknown.
 - **Guarded restart** is an explicit button. It checks the current status and
   idle/port flags, checks a 30-minute cooldown and a limit of three attempts in
-  24 hours, reports status before sending one `INITIALIZE` request, and never
-  automatically restarts the printer. The action does not poll after the reset
-  request; normal scheduled monitoring continues on its next interval. An HA
-  acknowledgement does not prove the printer completed its reboot.
+  24 hours, and reports status before sending one `INITIALIZE` request. The
+  action does not poll after the reset request; normal scheduled monitoring
+  continues on its next interval. An HA acknowledgement does not prove the
+  printer completed its reboot.
+- **Automatic recovery** is an opt-in integration option, disabled by default.
+  When a poll finds the Telnet-reported Wi-Fi fault while Telnet is reachable,
+  HA runs the same guarded recovery policy as the CLI: three fault samples ten
+  seconds apart with the same SSID, idle/port checks, the persisted cooldown
+  and daily limit, a final status/idle check, and one reset request. Manual and
+  automatic HA resets share the same lock and budget. A skipped or uncertain
+  request is not retried blindly, and the action performs no immediate
+  post-reset polling.
 
 The live reset command has not been validated on this printer. Use the button
 only when its restart behavior is acceptable. A print job may arrive between
@@ -79,11 +90,11 @@ python3 checker.py --request-restart
 
 Stages are `status`, `idle`, `run` (default), and `restart`. The one-shot `run`
 stage requires three matching `OFF`/channel-0 observations ten seconds apart.
-Both restart paths check idle state, enforce the same 30-minute cooldown and
-three-per-rolling-day limit in the CLI's local state file, report before
+Both CLI restart paths check idle state, enforce the same 30-minute cooldown
+and three-per-rolling-day limit in the CLI's local state file, report before
 restarting, send one request, and exit without post-restart polling. The CLI
-budget is separate from HA's budget file; avoid invoking restarts from both at
-the same time.
+budget is separate from HA's budget file. Avoid running CLI reset mode and HA
+automatic recovery at the same time, as their budgets are separate.
 
 The Telnet client uses only read-only `SHOW` and `HELP` commands before reset.
 It sends `EXIT` only if the printer explicitly requests it after `INITIALIZE`.

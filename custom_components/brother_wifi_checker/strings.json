@@ -20,6 +20,17 @@
       "already_configured": "This printer is already configured."
     }
   },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Automatic recovery",
+        "description": "When enabled, a persistent Telnet-reported Wi-Fi fault can trigger the guarded reset sequence. It is disabled by default.",
+        "data": {
+          "auto_recovery": "Enable automatic recovery"
+        }
+      }
+    }
+  },
   "entity": {
     "binary_sensor": {
       "reachable": {"name": "Telnet reachable"},

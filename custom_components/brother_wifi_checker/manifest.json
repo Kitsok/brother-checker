@@ -1,7 +1,7 @@
 {
   "domain": "brother_wifi_checker",
   "name": "Brother Wi-Fi Checker",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "documentation": "https://github.com/Kitsok/brother-checker/blob/main/README.md",
   "issue_tracker": "https://github.com/Kitsok/brother-checker/issues",
   "codeowners": ["@Kitsok"],
